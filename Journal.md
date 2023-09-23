@@ -34,8 +34,40 @@ $\text{ReLU}(x) = \max(0, x) $
 
 $\text{Softmax}(x)_i = \frac{e^{x_i}}{\sum_{j=1}^{N} e^{x_j}} $
 
+## Forward Propagation
 
+Forward propagation is the initial phase of the learning process. During this phase, the neural network makes its initial guesses about the output.
 
+Linear Transformation: For each layer, the input $A_{prev}$$​ is linearly transformed using the weights $W$ and biases $b$ to produce $Z$.
+
+Activation: The linearly transformed input $Z$ is then passed through an activation function to introduce non-linearity, resulting in $A$.
+
+Output: The final layer's activation output is the network's prediction, which is then compared to the actual label to compute the loss.
+
+## Backward Propagation
+
+Backward propagation is the stage where the neural network learns from its mistakes. The aim is to minimize the loss function.
+
+Compute Gradients: The first step in backpropagation is to compute the gradient of the loss function with respect to each weight and bias by applying the chain rule of calculus.
+
+Update Parameters: The gradients calculated are then used to update the weights and biases in the network. The code uses gradient descent
+
+Error Propagation: The 'backward' in backpropagation refers to the fact that the calculation of the gradients starts from the output layer and moves backward through the network, allowing for the efficient computation of gradients.
+
+Normalization: In the code, gradients are normalized by the number of samples to ensure that the weight updates are not influenced by the size of the data batch.
+
+## Gradient Descent
+Gradient Descent: This is one of the most basic optimization algorithms used for finding the minimum of a function. In the context of neural networks, this function is the loss function. Gradient Descent updates each parameter $θ$ according to the rule:
+
+$θ=θ−α∇J(θ)$
+
+where $α$ is the learning rate and $∇J(θ)$ is the gradient of the loss function $J$ with respect to $θ$.
+
+Learning Rate ($α$): This is a hyperparameter that controls the size of the updates to the parameters. Too large a learning rate might cause the model to converge too quickly and overshoot the minimum, while too small a learning rate could make the model very slow to converge or get stuck in a local minimum.
+
+Gradients:  These are the partial derivatives of the loss function with respect to each parameter. They are computed during the backward propagation phase and indicate the direction and magnitude by which each parameter should be updated.
+
+Parameter Update: The actual parameters W1,b1,W2,b2 are updated in the negative direction of the gradient. This is based on the principle that the function decreases fastest if one goes in the direction of the negative gradient.
 
 #### References:
 [ChatGPT session](https://chat.openai.com/share/0b8168ea-5d2a-497d-967e-c129e2424fcf) 
