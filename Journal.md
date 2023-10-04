@@ -55,6 +55,12 @@ The first step in backpropagation is to calculate the gradients of the loss func
 **Update Parameters**
 
 The gradients are then used to update the weights and biases in the network. The code employs Mini-batch Gradient Descent for this, implemented in the update_parameters() function.
+```python 
+    W1 -= learning_rate * dW1
+    b1 -= learning_rate * db1
+    W2 -= learning_rate * dW2
+    b2 -= learning_rate * db2
+```
 
 **Error Propagation**
 
@@ -120,7 +126,202 @@ update_parameters(W1, b1, W2, b2, dW1, db1, dW2, db2, learning_rate)
 ```
 The learning_rate controls the step size during the optimisation process. It's set prior to the training loop and is used in the update_parameters() function to adjust the weights and biases.
 
+## Data dictionary 
+### Functions 
+Functions
+
+* load_mnist_images(filename):
+    Input Arguments:
+        filename (String): The path to the MNIST images file.
+    Output: NumPy Array containing the images.
+    Description: Reads MNIST image data from a given file and returns it as a NumPy array.
+
+* load_mnist_labels(filename):
+    Input Arguments:
+        filename (String): The path to the MNIST labels file.
+    Output: NumPy Array containing the labels.
+    Description: Reads MNIST label data from a given file and returns it as a NumPy array.
+
+* relu(Z):
+    Input Arguments:
+        Z (NumPy Array): Pre-activated values.
+    Output: NumPy Array after applying ReLU.
+    Description: Applies the ReLU activation function to a given array.
+
+* softmax(Z):
+    Input Arguments:
+        Z (NumPy Array): Pre-activated values.
+    Output: NumPy Array after applying softmax.
+    Description: Applies the softmax activation function to a given array.
+
+* forward_layer(A_prev, W, b, activation):
+    Input Arguments:
+        A_prev (NumPy Array): Activated values from the previous layer.
+        W (NumPy Array): Weights of the current layer.
+        b (NumPy Array): Biases of the current layer.
+        activation (String): Type of activation function ('relu' or 'softmax').
+    Output: Activated values and pre-activated values for the current layer.
+    Description: Performs forward propagation for a single layer.
+
+* forward_propagation(X, W1, b1, W2, b2):
+    Input Arguments:
+        X (NumPy Array): Input data.
+        W1, W2 (NumPy Arrays): Weights for hidden and output layers.
+        b1, b2 (NumPy Arrays): Biases for hidden and output layers.
+    Output: Intermediate variables used for forward propagation.
+    Description: Performs forward propagation through the entire network.
+
+* one_hot_encode(labels, num_classes):
+    Input Arguments:
+        labels (NumPy Array): Array of labels to encode.
+        num_classes (Integer): Total number of unique classes.
+    Output: One-hot encoded labels.
+    Description: One-hot encodes the given labels.
+
+* backward_layer(dA, Z, A_prev, W, activation):
+    Input Arguments:
+        dA (NumPy Array): Gradient of the loss with respect to post-activation values.
+        Z (NumPy Array): Pre-activated values for the layer.
+        A_prev (NumPy Array): Activated values from the previous layer.
+        W (NumPy Array): Weights of the current layer.
+        activation (String): Type of activation function ('relu' or 'softmax').
+    Output: Gradients for the previous layer, current weights, and biases.
+    Description: Performs backward propagation for a single layer.
+
+* backward_propagation(A1, Z1, A2, Z2, X, y, W2):
+    Input Arguments:
+        A1, Z1, A2, Z2 (NumPy Arrays): Intermediate variables from forward propagation.
+        X (NumPy Array): Input data.
+        y (NumPy Array): True labels.
+        W2 (NumPy Array): Weights for the output layer.
+    Output: Gradients for weights and biases.
+    Description: Performs backward propagation through the entire network.
+
+* cross_entropy_loss(A, y):
+    Input Arguments:
+        A (NumPy Array): Predictions from the model.
+        y (NumPy Array): True labels.
+    Output: Loss value.
+    Description: Computes the categorical cross-entropy loss.
+
+* update_parameters(W1, b1, W2, b2, dW1, db1, dW2, db2, learning_rate):
+    Input Arguments:
+        W1, b1, W2, b2 (NumPy Arrays): Current weights and biases.
+        dW1, db1, dW2, db2 (NumPy Arrays): Gradients for weights and biases.
+        learning_rate (Float): Learning rate for gradient descent.
+    Output: None (In-place update).
+    Description: Updates the weights and biases using gradient descent.
+
+* train_neural_network(X_train, y_train, X_test, y_test, epochs, batch_size, learning_rate):
+    Input Arguments:
+        X_train, y_train (NumPy Arrays): Training data and labels.
+        X_test, y_test (NumPy Arrays): Test data and labels.
+        epochs (Integer): Number of training epochs.
+        batch_size (Integer): Size of mini-batches.
+        learning_rate (Float): Learning rate for gradient descent.
+    Output: Trained weights and biases, and metrics for training.
+    Description: Trains the neural network using mini-batch gradient descent.
+
+
+Variables in function:
+### Directory and File Handling
+
+| Variable         | Description                                                                                     |
+|------------------|-------------------------------------------------------------------------------------------------|
+| `extracted_dir`  | Specifies the directory where the MNIST dataset will be extracted.                                |
+| `extracted_files`| List containing the names of all files in the `extracted_dir`.                                   |
+
+---
+
+### Loading MNIST Data
+
+| Variable         | Description                                                                                     |
+|------------------|-------------------------------------------------------------------------------------------------|
+| `train_images`   | Numpy array holding the training images.                                                         |
+| `train_labels`   | Numpy array holding the training labels.                                                         |
+| `test_images`    | Numpy array holding the test images.                                                             |
+| `test_labels`    | Numpy array holding the test labels.                                                             |
+
+---
+
+### Neural Network Parameters Initialization
+
+| Variable       | Description                                                                                     |
+|----------------|-------------------------------------------------------------------------------------------------|
+| `input_size`   | Number of input neurons (784 because MNIST images are 28x28).                                    |
+| `hidden_size`  | Number of hidden neurons in the neural network.                                                  |
+| `output_size`  | Number of output neurons (10 for the 10 digits).                                                 |
+| `W1`           | Weights for the hidden layer.                                                                    |
+| `b1`           | Biases for the hidden layer.                                                                     |
+| `W2`           | Weights for the output layer.                                                                    |
+| `b2`           | Biases for the output layer.                                                                     |
+
+---
+
+### Activation Functions
+
+| Variable       | Description                                                                                     |
+|----------------|-------------------------------------------------------------------------------------------------|
+| `Z`            | Pre-activations (linear output) used in ReLU and Softmax functions.                              |
+| `exp_Z`        | Exponentiated `Z` values, used in Softmax for numerical stability.                               |
+
+---
+
+### Forward Propagation
+
+| Variable       | Description                                                                                     |
+|----------------|-------------------------------------------------------------------------------------------------|
+| `A1`           | Activations for the hidden layer.                                                                |
+| `Z1`           | Pre-activations (linear output) for the hidden layer.                                            |
+| `A2`           | Activations for the output layer.                                                                |
+| `Z2`           | Pre-activations (linear output) for the output layer.                                            |
+| `X_subset`     | Subset of training images used for testing forward propagation.                                  |
+| `y_subset`     | Subset of training labels used for testing forward propagation.                                  |
+
+---
+
+### Backward Propagation
+
+| Variable       | Description                                                                                     |
+|----------------|-------------------------------------------------------------------------------------------------|
+| `dA`           | Derivative of the loss with respect to the activated output `A`.                                 |
+| `dZ`           | Derivative of the loss with respect to the linear output `Z`.                                    |
+| `dW`           | Derivative of the loss with respect to the weights `W`.                                          |
+| `db`           | Derivative of the loss with respect to the bias `b`.                                             |
+| `dA_prev`      | Derivative of the loss with respect to the previous layer's activated output.                    |
+| `y_encoded`    | One-hot encoded labels.                                                                          |
+| `dA1`, `dA2`   | Specific derivatives of the loss for hidden and output layers, respectively.                     |
+
+---
+
+### Training Loop and Evaluation
+
+| Variable             | Description                                                                                   |
+|----------------------|-----------------------------------------------------------------------------------------------|
+| `train_losses`       | List to store the loss values during training.                                                 |
+| `test_accuracies`    | List to store the test accuracies during training.                                             |
+| `epochs`             | Number of epochs for training.                                                                 |
+| `batch_size`         | Size of each mini-batch.                                                                       |
+| `learning_rate`      | Learning rate for gradient descent.                                                            |
+| `W1_trained`         | Trained weights for the hidden layer.                                                          |
+| `b1_trained`         | Trained biases for the hidden layer.                                                           |
+| `W2_trained`         | Trained weights for the output layer.                                                          |
+| `b2_trained`         | Trained biases for the output layer.                                                           |
+| `shuffle_indices`    | Randomly shuffled indices used for shuffling the training data each epoch.                      |
+| `X_train_shuffled`   | Shuffled training images for each epoch.                                                       |
+| `y_train_shuffled`   | Shuffled training labels for each epoch.                                                       |
+| `X_batch`            | Mini-batch of training images.                                                                  |
+| `y_batch`            | Mini-batch of training labels.                                                                  |
+| `loss`               | Computed loss value for each mini-batch.                                                       |
+| `test_predictions`   | Predictions on the test set.                                                                    |
+| `test_accuracy`      | Accuracy on the test set, calculated each epoch.                                                |
+
+
+
+
 #### References/ helpful links:
-[ChatGPT session](https://chat.openai.com/share/0b8168ea-5d2a-497d-967e-c129e2424fcf) 
+[ChatGPT session for creation](https://chat.openai.com/share/0b8168ea-5d2a-497d-967e-c129e2424fcf) 
+
+[ChatGPT session for creation of variable table and description](https://chat.openai.com/share/c0d0bf8c-bbf3-49b1-bdf6-6f6c71055f8c) 
 
 https://www.baeldung.com/cs/gradient-stochastic-and-mini-batch 
